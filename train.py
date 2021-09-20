@@ -14,6 +14,7 @@ import torch
 from torch import nn, autograd, optim
 from torch.nn import functional as F
 from torch.utils import data
+from torchvision.datasets import ImageFolder
 import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -22,9 +23,10 @@ from training import lpips
 from training.model import Generator, Discriminator, Encoder
 from training.dataset_ddp import MultiResolutionDataset
 from tqdm import tqdm
+import numpy as np
 
+torch.manual_seed(10)
 torch.backends.cudnn.benchmark = True
-
 
 def setup(rank, world_size):
     os.environ["MASTER_ADDR"] = "localhost"
@@ -237,9 +239,9 @@ def ddp_main(rank, world_size, args):
         ckpt = torch.load(args.ckpt, map_location=map_location)
         train_args = ckpt["train_args"]
         print("load model:", args.ckpt)
-        train_args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
+        args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
         print(f"continue training from {train_args.start_iter} iter")
-        args = train_args
+        #args = train_args
         args.ckpt = True
     else:
         args.start_iter = 0
@@ -294,21 +296,30 @@ def ddp_main(rank, world_size, args):
 
         del ckpt  # free GPU memory
 
-    transform = transforms.Compose(
-        [
+    train_transform = transforms.Compose(
+        [   
+            transforms.Resize(args.size),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True),
         ]
     )
+    val_transform = transforms.Compose(
+        [   
+            transforms.Resize(args.size),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True),
+        ]
+    )
 
-    save_dir = "expr"
-    os.makedirs(save_dir, 0o777, exist_ok=True)
-    os.makedirs(save_dir + "/checkpoints", 0o777, exist_ok=True)
+    # save_dir = "expr"
+    # os.makedirs(save_dir, 0o777, exist_ok=True)
+    # os.makedirs(save_dir + "/checkpoints", 0o777, exist_ok=True)
 
-    train_dataset = MultiResolutionDataset(args.train_lmdb, transform, args.size)
-    val_dataset = MultiResolutionDataset(args.val_lmdb, transform, args.size)
-
+    #train_dataset = MultiResolutionDataset(args.train_lmdb, transform, args.size)
+    #val_dataset = MultiResolutionDataset(args.val_lmdb, transform, args.size)
+    train_dataset = ImageFolder(args.train_data, train_transform)
+    val_dataset = ImageFolder(args.val_data, val_transform)
     print(f"train_dataset: {len(train_dataset)}, val_dataset: {len(val_dataset)}")
 
     val_sampler = torch.utils.data.distributed.DistributedSampler(
@@ -355,7 +366,9 @@ def ddp_main(rank, world_size, args):
             train_sampler.set_epoch(epoch)
             print("epoch: ", epoch)
 
-        real_img = next(train_loader)
+        real_img,_ = next(train_loader)
+        real_img = np.array(real_img)
+        real_img = torch.from_numpy(real_img)
         real_img = real_img.to(map_location)
 
         adv_loss, w_rec_loss, stylecode = model(None, "G")
@@ -457,7 +470,8 @@ def ddp_main(rank, world_size, args):
                 x_rec_loss_avg, perceptual_loss_avg = 0, 0
                 iter_num = 0
 
-                for test_image in tqdm(val_loader):
+                print('\n---------- Evaluate valid dataset ----------')
+                for test_image, _ in val_loader:
                     test_image = test_image.to(map_location)
                     x_rec_loss, perceptual_loss = model(test_image, "cal_mse_lpips")
                     x_rec_loss_avg += x_rec_loss.mean()
@@ -503,15 +517,15 @@ def ddp_main(rank, world_size, args):
                             "g_optim": g_optim.state_dict(),
                             "d_optim": d_optim.state_dict(),
                         },
-                        f"{save_dir}/checkpoints/{str(i).zfill(6)}.pt",
+                        f"{str(i).zfill(6)}.pt",
                     )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--train_lmdb", type=str)
-    parser.add_argument("--val_lmdb", type=str)
+    parser.add_argument("--train_data", type=str)
+    parser.add_argument("--val_data", type=str)
     parser.add_argument("--ckpt", type=str)
     parser.add_argument(
         "--dataset",
