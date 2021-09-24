@@ -538,6 +538,7 @@ if __name__ == "__main__":
             "lsun/church_outdoor",
             "lsun/car",
             "lsun/bedroom",
+            "celeb_vn"
         ],
     )
     parser.add_argument("--iter", type=int, default=1400000)
