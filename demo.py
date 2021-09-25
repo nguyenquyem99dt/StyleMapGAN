@@ -10,7 +10,7 @@ Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 import flask
 from flask import Flask, render_template, request, redirect, url_for
-from flask_ngrok import run_with_ngrok # add
+from flask_ngrok import run_with_ngrok # new
 import numpy as np
 import base64
 import os

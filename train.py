@@ -239,7 +239,7 @@ def ddp_main(rank, world_size, args):
         ckpt = torch.load(args.ckpt, map_location=map_location)
         train_args = ckpt["train_args"]
         print("load model:", args.ckpt)
-        args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
+        train_args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
         print(f"continue training from {train_args.start_iter} iter")
         args = train_args
         args.ckpt = True
@@ -497,13 +497,15 @@ def ddp_main(rank, world_size, args):
                     x_rec_loss_avg_val = x_rec_loss_avg.item()
                     perceptual_loss_avg_val = perceptual_loss_avg.item()
 
-                    print(
-                        f"x_rec_loss_avg: {x_rec_loss_avg_val}, perceptual_loss_avg: {perceptual_loss_avg_val}"
-                    )
-
-                    print(
-                        f"step={i}, epoch={epoch}, x_rec_loss_avg_val={x_rec_loss_avg_val}, perceptual_loss_avg_val={perceptual_loss_avg_val}, d_loss_val={d_loss_val}, indomainGAN_D_loss_val={indomainGAN_D_loss_val}, indomainGAN_E_loss_val={indomainGAN_E_loss_val}, x_rec_loss_val={x_rec_loss_val}, perceptual_loss_val={perceptual_loss_val}, g_loss_val={g_loss_val}, adv_loss_val={adv_loss_val}, w_rec_loss_val={w_rec_loss_val}, r1_val={r1_val}, real_score_val={real_score_val}, fake_score_val={fake_score_val}, latent_std={latent_std}, latent_channel_std={latent_channel_std}, latent_spatial_std={latent_spatial_std}"
-                    )
+                    train_results = f"x_rec_loss_avg: {x_rec_loss_avg_val}\nperceptual_loss_avg: {perceptual_loss_avg_val}\n"
+                    val_results = f"step={i}\nepoch={epoch}\nx_rec_loss_avg_val={x_rec_loss_avg_val}\nperceptual_loss_avg_val={perceptual_loss_avg_val}\nd_loss_val={d_loss_val}\nindomainGAN_D_loss_val={indomainGAN_D_loss_val}\nindomainGAN_E_loss_val={indomainGAN_E_loss_val}\nx_rec_loss_val={x_rec_loss_val}\nperceptual_loss_val={perceptual_loss_val}\ng_loss_val={g_loss_val}\nadv_loss_val={adv_loss_val}\nw_rec_loss_val={w_rec_loss_val}\nr1_val={r1_val}\nreal_score_val={real_score_val}\nfake_score_val={fake_score_val}\nlatent_std={latent_std}\nlatent_channel_std={latent_channel_std}\nlatent_spatial_std={latent_spatial_std}\n"
+                    print(train_results)
+                    print(val_results)
+                    print(100 * '*')
+                    with open('training_log.txt', 'a+') as fout:
+                        fout.write(train_results)
+                        fout.write(val_results)
+                        fout.write('\n********************************************\n')
 
                     torch.save(
                         {
