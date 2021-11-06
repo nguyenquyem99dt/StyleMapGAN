@@ -254,7 +254,8 @@ if __name__ == "__main__":
 
     device = "cuda"
     transform = transforms.Compose(
-        [
+        [   
+            transforms.Resize(args.size),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True),
         ]
@@ -269,7 +270,9 @@ if __name__ == "__main__":
         "stylemixing",
     ]:
         os.makedirs(args.save_image_dir, exist_ok=True)
-        dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
+        #dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
+        dataset = ImageFolder(args.test_lmdb, transform)
+
     elif args.mixing_type == "local_editing":
 
         if dataset_name == "afhq":
@@ -434,6 +437,9 @@ if __name__ == "__main__":
 
         elif args.mixing_type == "reconstruction":
             for i, real_img in enumerate(tqdm(loader, mininterval=1)):
+                real_img,_ = real_img
+                real_img = np.array(real_img)
+                real_img = torch.from_numpy(real_img)
                 real_img = real_img.to(device)
                 recon_image = model(real_img, "reconstruction")
 
