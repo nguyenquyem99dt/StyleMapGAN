@@ -79,4 +79,6 @@ if __name__ == "__main__":
     mse_mean = sum(mse_results) / len(mse_results)
     lpips_mean = sum(lpips_results) / len(lpips_results)
 
-    print(mse_mean, lpips_mean)
+    print('Mean MSE:', mse_mean)
+    print('Mean LPIPS:', lpips_mean)
+    #print(mse_mean, lpips_mean)
