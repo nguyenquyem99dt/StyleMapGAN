@@ -207,7 +207,7 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument("--ckpt", metavar="CHECKPOINT", required=True)
-    parser.add_argument("--test_lmdb", type=str)
+    parser.add_argument("--test_data", type=str)
     parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--num_workers", type=int, default=10)
     parser.add_argument("--save_image_dir", type=str, default="expr")
@@ -270,8 +270,8 @@ if __name__ == "__main__":
         "stylemixing",
     ]:
         os.makedirs(args.save_image_dir, exist_ok=True)
-        #dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
-        dataset = ImageFolder(args.test_lmdb, transform)
+        #dataset = MultiResolutionDataset(args.test_data, transform, args.size)
+        dataset = ImageFolder(args.test_data, transform)
 
     elif args.mixing_type == "local_editing":
 
@@ -306,7 +306,7 @@ if __name__ == "__main__":
 
         # GT celeba_hq mask images
         if dataset_name == "celeba_hq":
-            assert "celeba_hq" in args.test_lmdb
+            assert "celeba_hq" in args.test_data
 
             dataset = GTMaskDataset("data/celeba_hq", transform, args.size)
 
@@ -325,8 +325,8 @@ if __name__ == "__main__":
 
         # afhq, coarse(half-and-half) masks
         else:
-            assert "afhq" in args.test_lmdb and "afhq" == dataset_name
-            dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
+            assert "afhq" in args.test_data and "afhq" == dataset_name
+            dataset = MultiResolutionDataset(args.test_data, transform, args.size)
 
     if args.mixing_type in [
         "w_interpolation",
