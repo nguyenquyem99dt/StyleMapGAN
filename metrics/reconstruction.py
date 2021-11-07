@@ -81,4 +81,3 @@ if __name__ == "__main__":
 
     print('Mean MSE:', mse_mean)
     print('Mean LPIPS:', lpips_mean)
-    #print(mse_mean, lpips_mean)

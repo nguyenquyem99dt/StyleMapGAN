@@ -132,8 +132,8 @@ if __name__ == "__main__":
 
     args.attr_celeba_hq = "semantic_manipulation/list_attr_celeba_hq.txt"
 
-    args.train_lmdb = f"{args.LMDB}_train"
-    args.val_lmdb = f"{args.LMDB}_val"
+    args.train_data = f"{args.LMDB}_train"
+    args.val_data = f"{args.LMDB}_val"
     args.test_lmdb = f"{args.LMDB}_test"
 
     model_name = args.ckpt.split("/")[-1].replace(".pt", "")
@@ -161,8 +161,8 @@ if __name__ == "__main__":
         ]
     )
 
-    train_dataset = MultiResolutionDataset(args.train_lmdb, transform, train_args.size)
-    val_dataset = MultiResolutionDataset(args.val_lmdb, transform, train_args.size)
+    train_dataset = MultiResolutionDataset(args.train_data, transform, train_args.size)
+    val_dataset = MultiResolutionDataset(args.val_data, transform, train_args.size)
     test_dataset = MultiResolutionDataset(args.test_lmdb, transform, train_args.size)
     dataset = data.ConcatDataset([train_dataset, val_dataset, test_dataset])
 

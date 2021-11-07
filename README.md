@@ -75,13 +75,13 @@ Implemented using DistributedDataParallel.
 
 ```bash
 # CelebA-HQ
-python train.py --dataset celeba_hq --train_lmdb data/celeba_hq/LMDB_train --val_lmdb data/celeba_hq/LMDB_val
+python train.py --dataset celeba_hq --train_data data/celeba_hq/LMDB_train --val_data data/celeba_hq/LMDB_val
 
 # AFHQ
-python train.py --dataset afhq --train_lmdb data/afhq/LMDB_train --val_lmdb data/afhq/LMDB_val
+python train.py --dataset afhq --train_data data/afhq/LMDB_train --val_data data/afhq/LMDB_val
 
 # CelebA-HQ / 1024x1024 image / 16x16 stylemap / Light version of Generator
-python train.py --size 1024 --latent_spatial_size 16 --small_generator --dataset celeba_hq --train_lmdb data/celeba_hq/LMDB_train --val_lmdb data/celeba_hq/LMDB_val 
+python train.py --size 1024 --latent_spatial_size 16 --small_generator --dataset celeba_hq --train_data data/celeba_hq/LMDB_train --val_data data/celeba_hq/LMDB_val 
 ```
 
 

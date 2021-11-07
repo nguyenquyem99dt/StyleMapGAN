@@ -14,7 +14,6 @@ import torch
 from torch import nn, autograd, optim
 from torch.nn import functional as F
 from torch.utils import data
-from torchvision.datasets import ImageFolder
 import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -23,10 +22,9 @@ from training import lpips
 from training.model import Generator, Discriminator, Encoder
 from training.dataset_ddp import MultiResolutionDataset
 from tqdm import tqdm
-import numpy as np
 
-torch.manual_seed(10)
 torch.backends.cudnn.benchmark = True
+
 
 def setup(rank, world_size):
     os.environ["MASTER_ADDR"] = "localhost"
@@ -241,10 +239,7 @@ def ddp_main(rank, world_size, args):
         print("load model:", args.ckpt)
         train_args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
         train_args.iter = args.iter
-        train_args.train_data = args.train_data
-        train_args.val_data = args.val_data
-        train_args.dataset = args.dataset
-        print(f"continue training from {train_args.start_iter}/{train_args.iter} iter.")
+        print(f"continue training from {train_args.start_iter} iter")
         args = train_args
         args.ckpt = True
     else:
@@ -300,17 +295,9 @@ def ddp_main(rank, world_size, args):
 
         del ckpt  # free GPU memory
 
-    train_transform = transforms.Compose(
-        [   
-            transforms.Resize(args.size),
+    transform = transforms.Compose(
+        [
             transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True),
-        ]
-    )
-    val_transform = transforms.Compose(
-        [   
-            transforms.Resize(args.size),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True),
         ]
@@ -320,10 +307,9 @@ def ddp_main(rank, world_size, args):
     # os.makedirs(save_dir, 0o777, exist_ok=True)
     # os.makedirs(save_dir + "/checkpoints", 0o777, exist_ok=True)
 
-    #train_dataset = MultiResolutionDataset(args.train_lmdb, transform, args.size)
-    #val_dataset = MultiResolutionDataset(args.val_lmdb, transform, args.size)
-    train_dataset = ImageFolder(args.train_data, train_transform)
-    val_dataset = ImageFolder(args.val_data, val_transform)
+    train_dataset = MultiResolutionDataset(args.train_data, transform, args.size)
+    val_dataset = MultiResolutionDataset(args.val_data, transform, args.size)
+
     print(f"train_dataset: {len(train_dataset)}, val_dataset: {len(val_dataset)}")
 
     val_sampler = torch.utils.data.distributed.DistributedSampler(
@@ -370,9 +356,7 @@ def ddp_main(rank, world_size, args):
             train_sampler.set_epoch(epoch)
             print("epoch: ", epoch)
 
-        real_img,_ = next(train_loader)
-        real_img = np.array(real_img)
-        real_img = torch.from_numpy(real_img)
+        real_img = next(train_loader)
         real_img = real_img.to(map_location)
 
         adv_loss, w_rec_loss, stylecode = model(None, "G")
@@ -473,9 +457,9 @@ def ddp_main(rank, world_size, args):
                 copy_norm_params(e_ema_module, e_module)
                 x_rec_loss_avg, perceptual_loss_avg = 0, 0
                 iter_num = 0
-
+                
                 print('\n---------- Evaluate valid dataset ----------')
-                for test_image, _ in val_loader:
+                for test_image in val_loader:
                     test_image = test_image.to(map_location)
                     x_rec_loss, perceptual_loss = model(test_image, "cal_mse_lpips")
                     x_rec_loss_avg += x_rec_loss.mean()
@@ -540,17 +524,13 @@ if __name__ == "__main__":
         choices=[
             "celeba_hq",
             "afhq",
-            "ffhq",
-            "lsun/church_outdoor",
-            "lsun/car",
-            "lsun/bedroom",
-            "celeb_vn"
+            "celeb_vn",
         ],
     )
     parser.add_argument("--iter", type=int, default=1400000)
-    parser.add_argument("--save_network_interval", type=int, default=10000)
+    parser.add_argument("--save_network_interval", type=int, default=2000)
     parser.add_argument("--small_generator", action="store_true")
-    parser.add_argument("--batch", type=int, default=16, help="total batch sizes")
+    parser.add_argument("--batch", type=int, default=8, help="total batch sizes")
     parser.add_argument("--size", type=int, choices=[128, 256, 512, 1024], default=256)
     parser.add_argument("--r1", type=float, default=10)
     parser.add_argument("--d_reg_every", type=int, default=16)

@@ -33,7 +33,6 @@ app = Flask(
     static_url_path="/demo/static",
     static_folder="demo/static",
 )
-run_with_ngrok(app)
 
 app.config["MAX_CONTENT_LENGTH"] = 10000000  # allow 10 MB post
 
@@ -199,8 +198,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset",
         type=str,
-        default="celeb_vn",
-        choices=["celeb_vn", "celeba_hq", "afhq", "lsun/church_outdoor", "lsun/car"],
+        default="celeba_hq",
+        choices=["celeba_hq", "afhq", "celeb_vn"],
     )
     parser.add_argument("--interpolation_step", type=int, default=16)
     parser.add_argument("--ckpt", type=str, required=True)
@@ -222,5 +221,4 @@ if __name__ == "__main__":
     model.eval()
 
     app.debug = True
-    #app.run(host="127.0.0.1", port=6006)
     app.run()

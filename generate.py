@@ -207,7 +207,7 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument("--ckpt", metavar="CHECKPOINT", required=True)
-    parser.add_argument("--test_data", type=str)
+    parser.add_argument("--test_lmdb", type=str)
     parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--num_workers", type=int, default=10)
     parser.add_argument("--save_image_dir", type=str, default="expr")
@@ -254,8 +254,7 @@ if __name__ == "__main__":
 
     device = "cuda"
     transform = transforms.Compose(
-        [   
-            transforms.Resize(args.size),
+        [
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True),
         ]
@@ -270,9 +269,7 @@ if __name__ == "__main__":
         "stylemixing",
     ]:
         os.makedirs(args.save_image_dir, exist_ok=True)
-        #dataset = MultiResolutionDataset(args.test_data, transform, args.size)
-        dataset = ImageFolder(args.test_data, transform)
-
+        dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
     elif args.mixing_type == "local_editing":
 
         if dataset_name == "afhq":
@@ -306,7 +303,7 @@ if __name__ == "__main__":
 
         # GT celeba_hq mask images
         if dataset_name == "celeba_hq":
-            assert "celeba_hq" in args.test_data
+            assert "celeba_hq" in args.test_lmdb
 
             dataset = GTMaskDataset("data/celeba_hq", transform, args.size)
 
@@ -325,8 +322,8 @@ if __name__ == "__main__":
 
         # afhq, coarse(half-and-half) masks
         else:
-            assert "afhq" in args.test_data and "afhq" == dataset_name
-            dataset = MultiResolutionDataset(args.test_data, transform, args.size)
+            assert "afhq" in args.test_lmdb and "afhq" == dataset_name
+            dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
 
     if args.mixing_type in [
         "w_interpolation",
@@ -437,9 +434,6 @@ if __name__ == "__main__":
 
         elif args.mixing_type == "reconstruction":
             for i, real_img in enumerate(tqdm(loader, mininterval=1)):
-                real_img,_ = real_img
-                real_img = np.array(real_img)
-                real_img = torch.from_numpy(real_img)
                 real_img = real_img.to(device)
                 recon_image = model(real_img, "reconstruction")
 
