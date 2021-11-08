@@ -239,6 +239,8 @@ def ddp_main(rank, world_size, args):
         print("load model:", args.ckpt)
         train_args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
         train_args.iter = args.iter
+        train_args.train_data = args.train_data
+        train_args.val_data = args.val_data
         print(f"continue training from {train_args.start_iter} iter")
         args = train_args
         args.ckpt = True
