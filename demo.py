@@ -33,6 +33,7 @@ app = Flask(
     static_url_path="/demo/static",
     static_folder="demo/static",
 )
+run_with_ngrok(app)
 
 app.config["MAX_CONTENT_LENGTH"] = 10000000  # allow 10 MB post
 
