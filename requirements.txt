@@ -1,5 +1,8 @@
 ninja
 scikit-image==0.16.2
+lmdb
+tqdm
+opencv-python
 
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.10.0+cu113
