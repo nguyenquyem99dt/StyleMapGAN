@@ -242,6 +242,7 @@ def ddp_main(rank, world_size, args):
         train_args.train_data = args.train_data
         train_args.val_data = args.val_data
         train_args.save_network_interval = args.save_network_interval
+        train_args.batch = args.batch
         print(f"continue training from {train_args.start_iter} iter")
         args = train_args
         args.ckpt = True
