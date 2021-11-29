@@ -59,7 +59,7 @@ function ReferenceNameSpace() {
                 var col = s.color(colors[palette.indexOf(c)]);
                 s.mask[palette_selected_index].noStroke();
                 s.mask[palette_selected_index].fill(col);
-                s.mask[palette_selected_index].ellipse(s.mouseX, s.mouseY, 10, 10);
+                s.mask[palette_selected_index].ellipse(s.mouseX, s.mouseY, 20, 20);
 
             } else { // eraser
                 if (sync_flag == true) {
