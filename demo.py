@@ -169,8 +169,7 @@ def post():
             mask = np.array(
                 (np.isclose(class_map, colors[i], atol=2.0)).all(axis=2), dtype=np.uint8
             )  # * 255
-            pil_mask = Image.fromarray(mask) # add
-            pil_mask.save(f'{save_dir}/mask_{i}.png') # add
+            
             mask = np.asarray(mask, dtype=np.float32).reshape(
                 (1, mask.shape[0], mask.shape[1])
             )
