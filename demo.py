@@ -173,7 +173,8 @@ def post():
                 (1, mask.shape[0], mask.shape[1])
             )
             masks.append(mask)
-            mask.save(f'{save_dir}/mask_{i}.png')
+            pil_mask = Image.fromarray(mask)
+            pil_mask.save(f'{save_dir}/mask_{i}.png')
 
         generated_images = my_morphed_images(
             original,
