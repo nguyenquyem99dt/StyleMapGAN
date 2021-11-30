@@ -528,7 +528,7 @@ if __name__ == "__main__":
         choices=[
             "celeba_hq",
             "afhq",
-            "celeb_vn",
+            "vn_celeb",
         ],
     )
     parser.add_argument("--iter", type=int, default=1400000)
