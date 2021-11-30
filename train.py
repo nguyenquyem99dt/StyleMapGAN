@@ -534,7 +534,7 @@ if __name__ == "__main__":
     parser.add_argument("--iter", type=int, default=1400000)
     parser.add_argument("--save_network_interval", type=int, default=2000)
     parser.add_argument("--small_generator", action="store_true")
-    parser.add_argument("--batch", type=int, default=8, help="total batch sizes")
+    parser.add_argument("--batch", type=int, default=16, help="total batch sizes")
     parser.add_argument("--size", type=int, choices=[128, 256, 512, 1024], default=256)
     parser.add_argument("--r1", type=float, default=10)
     parser.add_argument("--d_reg_every", type=int, default=16)
