@@ -201,8 +201,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset",
         type=str,
-        default="celeba_hq",
-        choices=["celeba_hq", "afhq", "celeb_vn"],
+        default="vn_celeb",
+        choices=["celeba_hq", "afhq", "vn_celeb"],
     )
     parser.add_argument("--interpolation_step", type=int, default=16)
     parser.add_argument("--ckpt", type=str, required=True)
