@@ -235,20 +235,23 @@ def ddp_main(rank, world_size, args):
 
     if args.ckpt:  # ignore current arguments
         ckpt = torch.load(args.ckpt, map_location=map_location)
-        train_args = ckpt["train_args"]
+        # train_args = ckpt["train_args"]
+        train_args = args
         print("load model:", args.ckpt)
         train_args.start_iter = int(args.ckpt.split("/")[-1].replace(".pt", ""))
-        train_args.iter = args.iter
-        train_args.train_data = args.train_data
-        train_args.val_data = args.val_data
-        train_args.save_network_interval = args.save_network_interval
-        train_args.batch = args.batch
-        train_args.dataset = args.dataset
+        # train_args.iter = args.iter
+        # train_args.train_data = args.train_data
+        # train_args.val_data = args.val_data
+        # train_args.save_network_interval = args.save_network_interval
+        # train_args.batch = args.batch
+        # train_args.dataset = args.dataset
         print(f"continue training from {train_args.start_iter} iter")
         args = train_args
         args.ckpt = True
     else:
         args.start_iter = 0
+    print(50 * '*')
+    print(args)
 
     # create model and move it to GPU with id rank
     model = DDPModel(device=map_location, args=args).to(map_location)
