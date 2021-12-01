@@ -22,6 +22,7 @@ p5_input_reference = null;
 p5_output = null;
 sync_flag = true;
 id = null;
+mouse_size = 15;
 
 function ReferenceNameSpace() {
     return function (s) {
@@ -59,7 +60,7 @@ function ReferenceNameSpace() {
                 var col = s.color(colors[palette.indexOf(c)]);
                 s.mask[palette_selected_index].noStroke();
                 s.mask[palette_selected_index].fill(col);
-                s.mask[palette_selected_index].ellipse(s.mouseX, s.mouseY, 20, 20);
+                s.mask[palette_selected_index].ellipse(s.mouseX, s.mouseY, mouse_size, mouse_size);
 
             } else { // eraser
                 if (sync_flag == true) {
