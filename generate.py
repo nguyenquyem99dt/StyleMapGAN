@@ -392,7 +392,6 @@ if __name__ == "__main__":
                 total_images_len = sum(rows * 2 ** lod for lod in lods)
                 total_images = torch.Tensor()
 
-                k = 0
                 while total_images_len > 0:
                     num = batch if total_images_len > batch else total_images_len
                     z = make_noise(num, args.latent_channel_size, device)
@@ -402,11 +401,7 @@ if __name__ == "__main__":
                         (z, truncation, truncation_mean_latent),
                         mode="random_generation",
                     )
-                    #### new ###
-                    for image in images:
-                        save_image(image, f'{args.save_image_dir}/random_generation_{seed}_{k}.png')
-                    k += 1
-                    ############
+                  
 
                     images = images.permute(0, 2, 3, 1)
                     images = images.cpu()
@@ -425,7 +420,6 @@ if __name__ == "__main__":
                 for col, lod in enumerate(lods):
                     for row in range(rows * 2 ** lod):
                         image = Image.fromarray(next(image_iter), "RGB")
-                        # image = image.crop((cx, cy, cx + cw, cy + ch))
                         image = image.resize(
                             (cw // 2 ** lod, ch // 2 ** lod), Image.ANTIALIAS
                         )
