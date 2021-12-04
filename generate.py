@@ -392,6 +392,7 @@ if __name__ == "__main__":
                 total_images_len = sum(rows * 2 ** lod for lod in lods)
                 total_images = torch.Tensor()
 
+                k = 0
                 while total_images_len > 0:
                     num = batch if total_images_len > batch else total_images_len
                     z = make_noise(num, args.latent_channel_size, device)
@@ -404,7 +405,10 @@ if __name__ == "__main__":
 
                     images = images.permute(0, 2, 3, 1)
                     images = images.cpu()
+                    for image in images:
+                        save_image(image, f'{args.save_image_dir}/random_generation_{seed}_{k}.png')
                     total_images = torch.cat([total_images, images], dim=0)
+                    k += 1
 
                 total_images = torch.clamp(total_images, min=-1.0, max=1.0)
                 total_images = (total_images + 1) / 2 * 255
@@ -574,8 +578,10 @@ if __name__ == "__main__":
                     n_sample = 29000
                 elif dataset_name == "afhq":
                     n_sample = 15130
-                elif dataset_name == "ffhq":
-                    n_sample = 69000
+                # elif dataset_name == "ffhq":
+                #     n_sample = 69000
+                elif dataset_name == 'vn_celeb':
+                    n_sample = 22105
 
                 indices1 = random.choices(indices, k=n_sample)
                 indices2 = random.choices(indices, k=n_sample)
