@@ -405,10 +405,12 @@ if __name__ == "__main__":
 
                     images = images.permute(0, 2, 3, 1)
                     images = images.cpu()
+                    #### new ###
                     for image in images:
                         save_image(image, f'{args.save_image_dir}/random_generation_{seed}_{k}.png')
                     total_images = torch.cat([total_images, images], dim=0)
                     k += 1
+                    ############
 
                 total_images = torch.clamp(total_images, min=-1.0, max=1.0)
                 total_images = (total_images + 1) / 2 * 255
