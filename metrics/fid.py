@@ -187,10 +187,10 @@ if __name__ == "__main__":
         n_sample = 29000
     elif args.dataset == "afhq":
         n_sample = 15130
-    elif args.dataset in ["lsun/car", "lsun/church_outdoor"]:
-        n_sample = 50000
-    elif args.dataset == "ffhq":
-        n_sample = 69000
+    # elif args.dataset in ["lsun/car", "lsun/church_outdoor"]:
+    #     n_sample = 50000
+    elif args.dataset == "vn_celeb":
+        n_sample = 22105
 
     inception = nn.DataParallel(load_patched_inception_v3()).to(device)
     inception.eval()
