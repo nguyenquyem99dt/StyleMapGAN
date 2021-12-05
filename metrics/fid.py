@@ -177,19 +177,22 @@ if __name__ == "__main__":
     parser.add_argument("--generated_image_path", type=str)
     parser.add_argument("--ckpt", metavar="CHECKPOINT")
     parser.add_argument("--dataset", type=str, required=True)
-    parser.add_argument("--n_sample", type=int, default=1000)
+    parser.add_argument("--n_sample", type=int, default=None)
 
     args = parser.parse_args()
     assert ((args.generated_image_path is None) and (args.ckpt is not None)) or (
         (args.generated_image_path is not None) and (args.ckpt is None)
     )
-    n_sample = args.n_sample
-    # if args.dataset == "celeba_hq":
-    #     n_sample = 29000
-    # elif args.dataset == "afhq":
-    #     n_sample = 15130
-    # elif args.dataset == "vn_celeb":
-    #     n_sample = 22105
+    
+    if args.n_sample == None:
+        if args.dataset == "celeba_hq":
+            n_sample = 29000
+        elif args.dataset == "afhq":
+            n_sample = 15130
+        elif args.dataset == "vn_celeb":
+            n_sample = 22105
+    else:
+        n_sample = args.n_sample
 
     inception = nn.DataParallel(load_patched_inception_v3()).to(device)
     inception.eval()
