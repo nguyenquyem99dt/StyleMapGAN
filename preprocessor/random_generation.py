@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torchvision import utils
 from tqdm import tqdm
-from training.model import Generator, Encoder
+from training.model import Generator
 
 class Model(nn.Module):
     def __init__(self, device="cuda"):
