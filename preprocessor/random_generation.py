@@ -26,16 +26,22 @@ class Model(nn.Module):
             channel_multiplier=args.channel_multiplier,
         )
 
-    def forward(self, input):
-        z, truncation, truncation_mean_latent = input
+    def forward(self, input, mode):
+        if mode == "calculate_mean_stylemap":
+            truncation_mean_latent = self.g_ema(input, calculate_mean_stylemap=True)
 
-        fake_img, _ = self.g_ema(
-            z,
-            truncation=truncation,
-            truncation_mean_latent=truncation_mean_latent,
-        )
+            return truncation_mean_latent
 
-        return fake_img
+        elif mode == "random_generation":
+            z, truncation, truncation_mean_latent = input
+
+            fake_img, _ = self.g_ema(
+                z,
+                truncation=truncation,
+                truncation_mean_latent=truncation_mean_latent,
+            )
+
+            return fake_img
 
 def make_noise(batch, latent_channel_size, device):
     return torch.randn(batch, latent_channel_size, device=device)
