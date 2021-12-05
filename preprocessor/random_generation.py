@@ -19,12 +19,12 @@ class Model(nn.Module):
             normalize_mode=args.normalize_mode,
             small_generator=args.small_generator,
         )
-        self.e_ema = Encoder(
-            args.size,
-            args.latent_channel_size,
-            args.latent_spatial_size,
-            channel_multiplier=args.channel_multiplier,
-        )
+        # self.e_ema = Encoder(
+        #     args.size,
+        #     args.latent_channel_size,
+        #     args.latent_spatial_size,
+        #     channel_multiplier=args.channel_multiplier,
+        # )
 
     def forward(self, input, mode):
         if mode == "calculate_mean_stylemap":
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     model = Model().to(device)
     model.g_ema.load_state_dict(ckpt["g_ema"])
-    model.e_ema.load_state_dict(ckpt["e_ema"])
+    # model.e_ema.load_state_dict(ckpt["e_ema"])
     model.eval()
 
     with torch.no_grad():
