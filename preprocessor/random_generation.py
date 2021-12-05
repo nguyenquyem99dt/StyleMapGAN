@@ -1,4 +1,5 @@
 import argparse
+import os
 import torch
 from torch import nn
 from torchvision import utils
@@ -57,6 +58,8 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=0)
 
     args = parser.parse_args()
+
+    os.makedirs(args.save_image_dir, exist_ok=True)
 
     ckpt = torch.load(args.ckpt)
     train_args = ckpt["train_args"]
