@@ -401,7 +401,6 @@ if __name__ == "__main__":
                         (z, truncation, truncation_mean_latent),
                         mode="random_generation",
                     )
-                  
 
                     images = images.permute(0, 2, 3, 1)
                     images = images.cpu()
