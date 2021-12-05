@@ -432,9 +432,12 @@ if __name__ == "__main__":
                 canvas.save(png)
 
         elif args.mixing_type == "reconstruction":
+            recon_time = 0
             for i, real_img in enumerate(tqdm(loader, mininterval=1)):
                 real_img = real_img.to(device)
+                t0 = time.time()
                 recon_image = model(real_img, "reconstruction")
+                recon_time += time.time() - t0
 
                 for i_b, (img_1, img_2) in enumerate(zip(real_img, recon_image)):
                     save_images(
@@ -444,6 +447,7 @@ if __name__ == "__main__":
                             f"{args.save_image_dir}/{i*batch+i_b}_recon.png",
                         ],
                     )
+            print(f'Total reconstruction time: {recon_time}')
 
         elif args.mixing_type == "transplantation":
 
