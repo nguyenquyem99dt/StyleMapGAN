@@ -11,6 +11,7 @@ Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 import flask
 from flask import Flask, render_template, request, redirect, url_for
 from flask_ngrok import run_with_ngrok # new
+from pyngrok import ngrok # for public server
 import numpy as np
 import base64
 import os
@@ -26,6 +27,10 @@ import torch.nn.functional as F
 import torchvision.transforms.functional as TF
 from torchvision import transforms
 import io
+
+# Set authentication
+NGROK_AUTH_TOKEN = '22DeddP7TNdpTacy8yQ6eYWg4S4_7k42ykiuKoME4BP2x3XS1'
+ngrok.set_auth_token(NGROK_AUTH_TOKEN)
 
 app = Flask(
     __name__,
