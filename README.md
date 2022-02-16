@@ -50,6 +50,7 @@ python train.py --dataset celeba_hq --train_data lmdb-data/celeba_hq/train --val
 
 # AFHQ
 python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb-data/afhq/val --small_generator
+```
 
 ## Metrics
 * Reconstruction: LPIPS, MSE
