@@ -51,31 +51,6 @@ python train.py --dataset celeba_hq --train_data lmdb-data/celeba_hq/train --val
 # AFHQ
 python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb-data/afhq/val --small_generator
 
-## Generate images
-
-<b>Reconstruction</b>
-Results are saved to `expr/reconstruction`.
-
-```bash
-# CelebA-HQ
-python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type reconstruction --test_lmdb data/celeba_hq/LMDB_test
-
-# AFHQ
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type reconstruction --test_lmdb data/afhq/LMDB_test
-
-```
-
-<b>W interpolation</b>
-Results are saved to `expr/w_interpolation`.
-
-```bash
-# CelebA-HQ
-python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type w_interpolation --test_lmdb data/celeba_hq/LMDB_test
-
-# AFHQ
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type w_interpolation --test_lmdb data/afhq/LMDB_test
-```
-
 ## Metrics
 * Reconstruction: LPIPS, MSE
 * Generation: FID
