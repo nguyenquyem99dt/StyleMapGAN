@@ -39,19 +39,17 @@ Run the following notebook on Colab: <br>
 https://colab.research.google.com/drive/1hFqHZZpd1tZL_Po5Z8rsR7EF4YyFYSQ4?usp=sharing
 
 ## Train network
-Implemented using DistributedDataParallel.
+Train network with small generator
 
 ```bash
+# VN-Celeb
+python train.py --dataset celeba_hq --train_data lmdb-data/vn_celeb/train --val_data lmdb-data/vn_celeb/val --small_generator
+
 # CelebA-HQ
-python train.py --dataset celeba_hq --train_data data/celeba_hq/LMDB_train --val_data data/celeba_hq/LMDB_val
+python train.py --dataset celeba_hq --train_data lmdb-data/celeba_hq/train --val_data lmdb-data/celeba_hq/val --small_generator
 
 # AFHQ
-python train.py --dataset afhq --train_data data/afhq/LMDB_train --val_data data/afhq/LMDB_val
-
-# CelebA-HQ / 1024x1024 image / 16x16 stylemap / Light version of Generator
-python train.py --size 1024 --latent_spatial_size 16 --small_generator --dataset celeba_hq --train_data data/celeba_hq/LMDB_train --val_data data/celeba_hq/LMDB_val 
-```
-
+python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb-data/afhq/val --small_generator
 
 ## Generate images
 
@@ -76,46 +74,6 @@ python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type w_
 
 # AFHQ
 python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type w_interpolation --test_lmdb data/afhq/LMDB_test
-```
-
-
-<b>Local editing</b>
-Results are saved to `expr/local_editing`. We pair images using a target semantic mask similarity. If you want to see details, please follow `preprocessor/README.md`.
-
-```bash
-# Using GroundTruth(GT) segmentation masks for CelebA-HQ dataset.
-python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type local_editing --test_lmdb data/celeba_hq/LMDB_test --local_editing_part nose
-
-# Using half-and-half masks for AFHQ dataset.
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type local_editing --test_lmdb data/afhq/LMDB_test
-```
-
-<b>Unaligned transplantation</b>
-Results are saved to `expr/transplantation`. It shows local transplantations examples of AFHQ. We recommend the demo code instead of this.
-
-```bash
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type transplantation --test_lmdb data/afhq/LMDB_test
-```
-
-<b>Random Generation</b>
-Results are saved to `expr/random_generation`. It shows random generation examples.
-
-```bash
-python generate.py --mixing_type random_generation --ckpt expr/checkpoints/celeba_hq_256_8x8.pt
-```
-
-<b>Style Mixing</b>
-Results are saved to `expr/stylemixing`. It shows style mixing examples.
-
-```bash
-python generate.py --mixing_type stylemixing --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --test_lmdb data/celeba_hq/LMDB_test
-```
-
-<b>Semantic Manipulation</b>
-Results are saved to `expr/semantic_manipulation`. It shows local semantic manipulation examples.
-
-```bash
-python semantic_manipulation.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --LMDB data/celeba_hq/LMDB --svm_train_iter 10000
 ```
 
 ## Metrics
