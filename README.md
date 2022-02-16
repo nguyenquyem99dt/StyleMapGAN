@@ -1,5 +1,7 @@
 
-## This is forked repo from StyleMapGAN - Official PyTorch Implementation
+## Thesis K2018 - Computer Vision
+## StyleMapGAN - PyTorch Implementation
+## Forked from naver-ai/StyleMapGAN - Offical Pytorch Implementation
 
 <p align="left"><img width="100%" src="assets/hinh_4_1_vn_celeb_toc.png" /></p>
 > Original paper: <br>
@@ -11,7 +13,7 @@
 <b>Interactive demo app</b>
 Run demo in your local machine.
 
-All test images are from [CelebA-HQ](https://arxiv.org/abs/1710.10196), [AFHQ](https://arxiv.org/abs/1912.01865), and [LSUN](https://www.yf.io/p/lsun).
+All test images are from [CelebA-HQ](https://arxiv.org/abs/1710.10196), [AFHQ](https://arxiv.org/abs/1912.01865), and [VN-Celeb](https://viblo.asia/p/vn-celeb-du-lieu-khuon-mat-nguoi-noi-tieng-viet-nam-va-bai-toan-face-recognition-Az45bG9VKxY).
 
 ```bash
 python demo.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --dataset celeba_hq
