@@ -24,6 +24,10 @@ conda create -y -n stylemapgan python=3.6.12
 conda activate stylemapgan
 ./install.sh
 ```
+Or via pip:
+```bash
+pip install -r requirements.txt
+```
 
 ## Datasets
 You can find LMDB datasets via the following link: <br>
@@ -55,9 +59,8 @@ python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb
 ## Metrics
 * Reconstruction: LPIPS, MSE
 * Generation: FID
-* Local editing: MSE<sub>src</sub>, MSE<sub>ref</sub>, Detectability (Refer to [CNNDetection](https://github.com/PeterWang512/CNNDetection))
 
-If you want to see details, please follow `metrics/README.md`.<br>
+If you want to see more details, please follow the official file `metrics/README.md`.<br>
 Or you can run the following notebooks:<br>
 # VN-Celeb
 https://colab.research.google.com/drive/1VSJX35k_bGhxNSlIGb3u2d1oRh3_DfIZ?usp=sharing
@@ -65,6 +68,7 @@ https://colab.research.google.com/drive/1VSJX35k_bGhxNSlIGb3u2d1oRh3_DfIZ?usp=sh
 https://colab.research.google.com/drive/1coWv9sI5lh3AS6fAYDHbAYJMaWX9fAhv?usp=sharing
 # AFHQ
 https://colab.research.google.com/drive/1kPu7SQ00vC5dx0W4K8_feeP81gLzlUIH?usp=sharing
+
 ## License
 The source code, pre-trained models, and dataset are available under [Creative Commons BY-NC 4.0](LICENSE) license by NAVER Corporation. You can **use, copy, tranform and build upon** the material for **non-commercial purposes** as long as you give **appropriate credit** by citing our paper, and indicate if changes were made. 
 
