@@ -77,14 +77,18 @@ python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type w_inter
 ```
 
 ## Metrics
-
 * Reconstruction: LPIPS, MSE
-* W interpolation: FID<sub>lerp</sub>
 * Generation: FID
 * Local editing: MSE<sub>src</sub>, MSE<sub>ref</sub>, Detectability (Refer to [CNNDetection](https://github.com/PeterWang512/CNNDetection))
 
-If you want to see details, please follow `metrics/README.md`.
-
+If you want to see details, please follow `metrics/README.md`.<br>
+Or you can run the following notebooks:<br>
+# VN-Celeb
+https://colab.research.google.com/drive/1VSJX35k_bGhxNSlIGb3u2d1oRh3_DfIZ?usp=sharing
+# CelebA-HQ
+https://colab.research.google.com/drive/1coWv9sI5lh3AS6fAYDHbAYJMaWX9fAhv?usp=sharing
+# AFHQ
+https://colab.research.google.com/drive/1kPu7SQ00vC5dx0W4K8_feeP81gLzlUIH?usp=sharing
 ## License
 The source code, pre-trained models, and dataset are available under [Creative Commons BY-NC 4.0](LICENSE) license by NAVER Corporation. You can **use, copy, tranform and build upon** the material for **non-commercial purposes** as long as you give **appropriate credit** by citing our paper, and indicate if changes were made. 
 
