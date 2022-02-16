@@ -62,11 +62,11 @@ python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb
 
 If you want to see more details, please follow the official file `metrics/README.md`.<br>
 Or you can run the following notebooks:<br>
-# VN-Celeb
+* VN-Celeb
 https://colab.research.google.com/drive/1VSJX35k_bGhxNSlIGb3u2d1oRh3_DfIZ?usp=sharing
-# CelebA-HQ
+* CelebA-HQ
 https://colab.research.google.com/drive/1coWv9sI5lh3AS6fAYDHbAYJMaWX9fAhv?usp=sharing
-# AFHQ
+* AFHQ
 https://colab.research.google.com/drive/1kPu7SQ00vC5dx0W4K8_feeP81gLzlUIH?usp=sharing
 
 ## License
