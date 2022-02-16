@@ -3,8 +3,7 @@
 <b> Image Editing based on Generative Adversarial Networks </b>
 <p align="left"><img width="100%" src="assets/hinh_4_1_vn_celeb_toc.png" /></p>
 Forked from naver-ai/StyleMapGAN - Offical Pytorch Implementation <br>
-Original paper: <br>
-<i>StyleMapGAN: Exploiting Spatial Dimensions of Latent in GAN for Real-time Image Editing </i><br>
+Original paper: <i>StyleMapGAN: Exploiting Spatial Dimensions of Latent in GAN for Real-time Image Editing </i><br>
 Link paper: https://arxiv.org/abs/2104.14754 <br>
 
 ## Installation
