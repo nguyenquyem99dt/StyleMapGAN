@@ -1,12 +1,10 @@
 
-## Thesis K2018 - Computer Vision
-## StyleMapGAN - PyTorch Implementation
-## Forked from naver-ai/StyleMapGAN - Offical Pytorch Implementation
-
+## Thesis K2018 - Image Editing
 <p align="left"><img width="100%" src="assets/hinh_4_1_vn_celeb_toc.png" /></p>
-> Original paper: <br>
-> **StyleMapGAN: Exploiting Spatial Dimensions of Latent in GAN for Real-time Image Editing**<br>
-> Link paper: https://arxiv.org/abs/2104.14754 <br>
+Forked from naver-ai/StyleMapGAN - Offical Pytorch Implementation
+Original paper: <br>
+**StyleMapGAN: Exploiting Spatial Dimensions of Latent in GAN for Real-time Image Editing**<br>
+Link paper: https://arxiv.org/abs/2104.14754 <br>
 
 
 ## Demo
