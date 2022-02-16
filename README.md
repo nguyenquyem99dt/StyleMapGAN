@@ -1,5 +1,6 @@
 
-## Thesis K2018 - Image Editing
+## Thesis K2018 - Computer Vision
+<b> Image Editing based on Generative Adversarial Networks </b>
 <p align="left"><img width="100%" src="assets/hinh_4_1_vn_celeb_toc.png" /></p>
 Forked from naver-ai/StyleMapGAN - Offical Pytorch Implementation <br>
 Original paper: <br>
