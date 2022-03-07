@@ -1,21 +1,10 @@
 
-## This is forked repo from StyleMapGAN - Official PyTorch Implementation
-
-<p align="left"><img width="100%" src="assets/teaser.jpg" /></p>
-> Original paper: <br>
-> **StyleMapGAN: Exploiting Spatial Dimensions of Latent in GAN for Real-time Image Editing**<br>
-> Link paper: https://arxiv.org/abs/2104.14754 <br>
-
-
-## Demo
-<b>Interactive demo app</b>
-Run demo in your local machine.
-
-All test images are from [CelebA-HQ](https://arxiv.org/abs/1710.10196), [AFHQ](https://arxiv.org/abs/1912.01865), and [LSUN](https://www.yf.io/p/lsun).
-
-```bash
-python demo.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --dataset celeba_hq
-```
+## Thesis K2018 - Computer Vision
+<b> Image Editing based on Generative Adversarial Networks </b>
+<p align="left"><img width="100%" src="assets/hinh_4_1_vn_celeb_toc.png" /></p>
+Forked from naver-ai/StyleMapGAN - Offical Pytorch Implementation <br>
+Original paper: <i>StyleMapGAN: Exploiting Spatial Dimensions of Latent in GAN for Real-time Image Editing </i><br>
+Link paper: https://arxiv.org/abs/2104.14754 <br>
 
 ## Installation
 
@@ -35,118 +24,53 @@ conda create -y -n stylemapgan python=3.6.12
 conda activate stylemapgan
 ./install.sh
 ```
-
-## Datasets and pre-trained networks
-We provide a script to download datasets used in StyleMapGAN and the corresponding pre-trained networks. The datasets and network checkpoints will be downloaded and stored in the `data` and `expr/checkpoints` directories, respectively.
-
-<b>CelebA-HQ.</b> To download the CelebA-HQ dataset and parse it, run the following commands:
-
+Or via pip:
 ```bash
-# Download raw images and create LMDB datasets using them
-# Additional files are also downloaded for local editing
-bash download.sh create-lmdb-dataset celeba_hq
-
-# Download the pretrained network (256x256) 
-bash download.sh download-pretrained-network-256 celeba_hq # 20M-image-trained models
-bash download.sh download-pretrained-network-256 celeba_hq_5M # 5M-image-trained models used in our paper for comparison with other baselines and for ablation studies.
-
-# Download the pretrained network (1024x1024 image / 16x16 stylemap / Light version of Generator)
-bash download.sh download-pretrained-network-1024 ffhq_16x16
+pip install -r requirements.txt
 ```
 
-<b>AFHQ.</b> For AFHQ, change above commands from 'celeba_hq' to 'afhq'.
+## Datasets
+You can find LMDB datasets via the following link: <br>
+https://drive.google.com/drive/folders/1dsaopj2l_KqO7vzlQnO-qOO0sj82VNfs?usp=sharing
 
+## Pre-trained weights
+Three pre-trained weights corresponding to VN-Celeb, CelebA-HQ and AFHQ datasets <br>
+https://drive.google.com/drive/folders/1eZ2JXSVi-NpZvaBOliLWKnm4Uf_WKdIq?usp=sharing
+
+## Demo
+Upload LMDB datasets and pre-trained weights you downloaded to your google drive. <br>
+Run the following notebook on Colab: <br>
+https://colab.research.google.com/drive/1hFqHZZpd1tZL_Po5Z8rsR7EF4YyFYSQ4?usp=sharing
 
 ## Train network
-Implemented using DistributedDataParallel.
+Train network with small generator
 
 ```bash
+# VN-Celeb
+python train.py --dataset celeba_hq --train_data lmdb-data/vn_celeb/train --val_data lmdb-data/vn_celeb/val --small_generator
+
 # CelebA-HQ
-python train.py --dataset celeba_hq --train_data data/celeba_hq/LMDB_train --val_data data/celeba_hq/LMDB_val
+python train.py --dataset celeba_hq --train_data lmdb-data/celeba_hq/train --val_data lmdb-data/celeba_hq/val --small_generator
 
 # AFHQ
-python train.py --dataset afhq --train_data data/afhq/LMDB_train --val_data data/afhq/LMDB_val
-
-# CelebA-HQ / 1024x1024 image / 16x16 stylemap / Light version of Generator
-python train.py --size 1024 --latent_spatial_size 16 --small_generator --dataset celeba_hq --train_data data/celeba_hq/LMDB_train --val_data data/celeba_hq/LMDB_val 
-```
-
-
-## Generate images
-
-<b>Reconstruction</b>
-Results are saved to `expr/reconstruction`.
-
-```bash
-# CelebA-HQ
-python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type reconstruction --test_lmdb data/celeba_hq/LMDB_test
-
-# AFHQ
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type reconstruction --test_lmdb data/afhq/LMDB_test
-
-```
-
-<b>W interpolation</b>
-Results are saved to `expr/w_interpolation`.
-
-```bash
-# CelebA-HQ
-python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type w_interpolation --test_lmdb data/celeba_hq/LMDB_test
-
-# AFHQ
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type w_interpolation --test_lmdb data/afhq/LMDB_test
-```
-
-
-<b>Local editing</b>
-Results are saved to `expr/local_editing`. We pair images using a target semantic mask similarity. If you want to see details, please follow `preprocessor/README.md`.
-
-```bash
-# Using GroundTruth(GT) segmentation masks for CelebA-HQ dataset.
-python generate.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --mixing_type local_editing --test_lmdb data/celeba_hq/LMDB_test --local_editing_part nose
-
-# Using half-and-half masks for AFHQ dataset.
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type local_editing --test_lmdb data/afhq/LMDB_test
-```
-
-<b>Unaligned transplantation</b>
-Results are saved to `expr/transplantation`. It shows local transplantations examples of AFHQ. We recommend the demo code instead of this.
-
-```bash
-python generate.py --ckpt expr/checkpoints/afhq_256_8x8.pt --mixing_type transplantation --test_lmdb data/afhq/LMDB_test
-```
-
-<b>Random Generation</b>
-Results are saved to `expr/random_generation`. It shows random generation examples.
-
-```bash
-python generate.py --mixing_type random_generation --ckpt expr/checkpoints/celeba_hq_256_8x8.pt
-```
-
-<b>Style Mixing</b>
-Results are saved to `expr/stylemixing`. It shows style mixing examples.
-
-```bash
-python generate.py --mixing_type stylemixing --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --test_lmdb data/celeba_hq/LMDB_test
-```
-
-<b>Semantic Manipulation</b>
-Results are saved to `expr/semantic_manipulation`. It shows local semantic manipulation examples.
-
-```bash
-python semantic_manipulation.py --ckpt expr/checkpoints/celeba_hq_256_8x8.pt --LMDB data/celeba_hq/LMDB --svm_train_iter 10000
+python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb-data/afhq/val --small_generator
 ```
 
 ## Metrics
-
 * Reconstruction: LPIPS, MSE
-* W interpolation: FID<sub>lerp</sub>
 * Generation: FID
-* Local editing: MSE<sub>src</sub>, MSE<sub>ref</sub>, Detectability (Refer to [CNNDetection](https://github.com/PeterWang512/CNNDetection))
 
-If you want to see details, please follow `metrics/README.md`.
+If you want to see more details, please follow the official file `metrics/README.md`.<br>
+Or you can run the following notebooks:<br>
+* VN-Celeb
+https://colab.research.google.com/drive/1VSJX35k_bGhxNSlIGb3u2d1oRh3_DfIZ?usp=sharing
+* CelebA-HQ
+https://colab.research.google.com/drive/1coWv9sI5lh3AS6fAYDHbAYJMaWX9fAhv?usp=sharing
+* AFHQ
+https://colab.research.google.com/drive/1kPu7SQ00vC5dx0W4K8_feeP81gLzlUIH?usp=sharing
 
 ## License
+(Official Repo) <br>
 The source code, pre-trained models, and dataset are available under [Creative Commons BY-NC 4.0](LICENSE) license by NAVER Corporation. You can **use, copy, tranform and build upon** the material for **non-commercial purposes** as long as you give **appropriate credit** by citing our paper, and indicate if changes were made. 
 
 For business inquiries, please contact clova-jobs@navercorp.com.<br/>	
@@ -162,9 +86,3 @@ If you find this work useful for your research, please cite our paper:
   year={2021}
 }
 ```
-## Related Projects
-
-Model code starts from [StyleGAN2 PyTorch unofficial code](https://github.com/rosinality/stylegan2-pytorch), which refers to [StyleGAN2 official code](https://github.com/NVlabs/stylegan2).
-[LPIPS](https://github.com/richzhang/PerceptualSimilarity), [FID](https://github.com/mseitzer/pytorch-fid), and [CNNDetection](https://github.com/PeterWang512/CNNDetection) codes are used for evaluation.
-In semantic manipulation, we used [StyleGAN pretrained network](https://github.com/NVlabs/stylegan) to get positive and negative samples by ranking.
-The demo code starts from [Neural-Collage](https://github.com/quolc/neural-collage#web-based-demos).
