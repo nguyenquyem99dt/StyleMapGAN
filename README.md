@@ -57,6 +57,7 @@ python train.py --dataset afhq --train_data lmdb-data/afhq/train --val_data lmdb
 ```
 
 ## Metrics
+* Local editing: MSE (source & reference)
 * Reconstruction: LPIPS, MSE
 * Generation: FID
 
