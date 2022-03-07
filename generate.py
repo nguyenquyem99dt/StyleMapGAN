@@ -353,7 +353,7 @@ if __name__ == "__main__":
         real_imgs = torch.Tensor().to(device)
 
         if args.mixing_type == "local_editing":
-            if dataset_name == "afhq":
+            if dataset_name == "afhq" or dataset_name == 'vn_celeb':
                 masks = (
                     -2 * torch.ones(n_sample, args.size, args.size).to(device).float()
                 )
@@ -586,7 +586,7 @@ if __name__ == "__main__":
                 indices2 = random.choices(indices, k=n_sample)
 
             elif args.mixing_type == "local_editing":
-                if dataset_name == "afhq":
+                if dataset_name == "afhq" or dataset_name == 'vn_celeb':
                     # change it later
                     indices = list(range(len(total_latents)))
                     random.shuffle(indices)
@@ -658,7 +658,7 @@ if __name__ == "__main__":
 
                         mask = mask1 + mask2
                         mask = mask.float()
-                    elif dataset_name == "afhq":
+                    elif dataset_name == "afhq" or dataset_name == 'vn_celeb':
                         mask = masks[index1]
 
                     mixed_image, recon_img_src, recon_img_ref = model(
