@@ -145,7 +145,7 @@ class Model(nn.Module):
                     mask=mask,
                 )[0]
 
-            elif dataset_name == "afhq":
+            elif dataset_name == "afhq" or dataset_name == 'vn_celeb':
                 mixed_image = self.g_ema(
                     [w1, w2], input_is_stylecode=True, mix_space="w", mask=mask
                 )[0]
