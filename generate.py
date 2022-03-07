@@ -321,9 +321,13 @@ if __name__ == "__main__":
             }
 
         # afhq, coarse(half-and-half) masks
-        else:
-            assert "afhq" in args.test_lmdb and "afhq" == dataset_name
+        elif dataset_name == 'afhq':
+            assert "afhq" in args.test_lmdb
             dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
+        else:
+            assert 'vn_celeb' in args.test_lmdb
+            dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
+
 
     if args.mixing_type in [
         "w_interpolation",
