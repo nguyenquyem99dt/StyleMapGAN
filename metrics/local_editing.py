@@ -55,8 +55,11 @@ if __name__ == "__main__":
 
     if "celeba_hq" in args.data_dir:
         parts = os.listdir(args.data_dir)
-    elif "afhq" in args.data_dir or "vn_celeb" in args.data_dir:
+    elif "afhq" in args.data_dir:
         parts = [""]
+    elif 'vn_celeb' in args.data_dir:
+        parts = ['']
+        size = 128
 
     print("parts", parts)
 
