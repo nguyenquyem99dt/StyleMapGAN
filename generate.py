@@ -272,7 +272,7 @@ if __name__ == "__main__":
         dataset = MultiResolutionDataset(args.test_lmdb, transform, args.size)
     elif args.mixing_type == "local_editing":
 
-        if dataset_name == "afhq":
+        if dataset_name == "afhq" or dataset_name == 'vn_celeb':
             args.save_image_dir = os.path.join(args.save_image_dir)
             for kind in [
                 "mask",
